@@ -1,6 +1,16 @@
 (function () {
+  // Body class per route — used by minimal.css for page-specific tweaks
+  var p = window.location.pathname.replace(/\/$/, '') || '/'
+  // blog list (home) or alias /blog
+  if (p === '' || p === '/' || p === '/blog' || p === '/blog.html') {
+    document.body.classList.add('route-blog')
+  }
+  if (p.indexOf('/qianhong') === 0) document.body.classList.add('route-qianhong')
+  if (p.indexOf('/about') === 0 || p === '/me' || p === '/me.html') {
+    document.body.classList.add('route-me')
+  }
+
   // Highlight current nav item based on current path
-  var path = window.location.pathname.replace(/\/$/, '');
   document.querySelectorAll('.cinema-nav-item').forEach(function (a) {
     var href = (a.getAttribute('href') || '').replace(/\/$/, '');
     if (!href) return;

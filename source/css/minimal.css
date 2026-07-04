@@ -86,48 +86,42 @@ nav#navbar, #navbar,
 .cinema-sidebar {
   position: fixed;
   top: 0; left: 0; bottom: 0;
-  width: 180px;
+  width: 320px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 7vh 22px 9vh;
+  padding: 8vh 28px 8vh;
   background-color: transparent !important;
   background-image: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   border-right: 1px solid rgba(245,243,236,0.08);
   z-index: 20;
+  overflow-y: auto;             /* if many posts, scroll within the column */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245,243,236,0.12) transparent;
 }
 
-.cinema-brand {
-  display: flex;
-  align-self: flex-start;
-  width: 44px; height: 44px;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: var(--ink);
-  border: 1px solid rgba(245,243,236,0.45);
-  border-radius: 50%;
-  margin: 0 0 12vh;
-  text-shadow: 0 1px 12px rgba(0,0,0,0.6);
-  transition: border-color .45s ease, color .45s ease;
-}
-.cinema-brand:hover { color: var(--accent); border-color: var(--accent); }
-.cinema-brand-q {
+/* 1. signature (decorative, NOT a link) */
+.cinema-signature {
   font-family: var(--serif);
   font-style: italic;
-  font-weight: 500;
-  font-size: 23px;
-  line-height: 1;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--ink-dim);
+  letter-spacing: 0.22em;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.65);
+  margin: 0 0 6vh;
+  user-select: none;
+  cursor: default;
 }
 
+/* 2. nav (qianhong / me / blog) */
 .cinema-nav {
   display: flex;
   flex-direction: column;
-  gap: 9vh;             /* generous breathing room; vh scales with viewport so it shrinks as more items are added */
-  flex: 1;
-  align-items: flex-start;
+  gap: 7vh;
+  margin: 0 0 8vh;
 }
 
 .cinema-nav-item {
@@ -135,23 +129,57 @@ nav#navbar, #navbar,
   font-style: italic;
   color: var(--ink);
   text-decoration: none;
-  font-size: 17px;
+  font-size: 18px;
   letter-spacing: 0.22em;
-  padding: 6px 0 6px 16px;
+  padding: 4px 0 4px 14px;
   border-left: 1px solid transparent;
   text-shadow: 0 1px 12px rgba(0,0,0,0.6);
   transition: color .5s ease, border-color .5s ease, transform .5s ease;
 }
 .cinema-nav-item:hover { color: var(--ink); transform: translateX(3px); }
 .cinema-nav-item.is-active {
-  color: var(--ink);
   border-left-color: var(--accent);
   text-shadow: 0 0 14px rgba(216,201,138,0.45), 0 1px 12px rgba(0,0,0,0.6);
 }
-.cinema-nav-item .cinema-nav-zh {
+
+/* 3. embedded post feed (transparent cards stacked vertically) */
+.cinema-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-bottom: 6vh;
+}
+
+.cinema-card {
+  display: block;
+  text-decoration: none;
+  padding: 12px 0 14px;
+  border-left: 1px solid rgba(245,243,236,0.10);
+  padding-left: 14px;
+  transition: border-color .4s ease, transform .4s ease;
+}
+.cinema-card:hover {
+  border-left-color: var(--accent);
+  transform: translateX(2px);
+}
+.cinema-card-title {
   font-family: var(--serif);
   font-style: italic;
-  letter-spacing: 0.26em;
+  font-size: 17px;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.65);
+}
+.cinema-card:hover .cinema-card-title { color: var(--accent); }
+.cinema-card-excerpt {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-mute);
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.55);
 }
 
 .cinema-mode-toggle {
@@ -176,12 +204,52 @@ nav#navbar, #navbar,
 main {
   position: relative;
   z-index: 3 !important;
-  padding: 0 0 0 200px;   /* leave space for sidebar */
+  padding: 0 6vw 0 280px;   /* closer to sidebar */
   min-height: 100vh;
   background: transparent !important;
 }
 @media (max-width: 768px) {
   main { padding: 0 0 0 0; }
+}
+
+/* ---- Home is the blog list (1 column wide).
+   On / the Fluid .index-card renders the post list — keep it. ---- */
+#board { background: transparent !important; border: 0 !important; padding: 0 !important; }
+#board::before, #board::after { display: none !important; }
+#board h1 { display: none !important; }   /* hide "qianhong" duplicate h1 on home */
+
+/* ---- The /qianhong signature page ---- */
+body.route-qianhong .page-content {
+  margin: 0 !important;
+  padding: 22vh 6vw 0 !important;
+  max-width: 760px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+body.route-qianhong .page-content h1,
+body.route-qianhong .page-content h2,
+body.route-qianhong .page-content h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(40px, 6vw, 88px);
+  letter-spacing: 0.04em;
+  line-height: 1.22;
+  color: var(--ink);
+  text-shadow: 0 2px 36px rgba(0,0,0,0.7);
+  margin: 0 0 22px 0;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(245,243,236,0.18);
+}
+body.route-qianhong .page-content p,
+body.route-qianhong .page-content ul {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.95;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
 }
 
 /* Optional: a thin dark glass band at the top of main for poster header */
@@ -241,61 +309,112 @@ main {
 
 .index-card {
   margin-top: 12vh;
-  padding: 0 6vw 18vh;
+  padding: 0 0 14vh 280px;       /* cards sit just right of sidebar */
+  position: relative;
+}
+/* Bootstrap's `.row > .mx-auto` would push the row to the right edge (margin auto).                       */
+/* High-specificity override keeps it next to the sidebar. We need (0,2,0)+!important from row container. */
+body.route-blog .row.mx-auto.index-card {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  max-width: 720px;
 }
 
+/* The actual post card band. Hover lights up the whole thing uniformly —
+   background + left border only. No per-element color change. */
 .index-info {
-  padding: 4vh 0 0 !important;
+  padding: 18px 22px 22px 22px !important;
+  margin-left: -22px;
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
+  position: relative;
+  border-left: 1px solid transparent;
+  transition: background-color .25s ease, border-left-color .25s ease;
 }
+.index-info:hover {
+  background-color: rgba(245,243,236,0.12) !important;
+  border-left-color: var(--accent) !important;
+}
+
+/* (blog-intro removed in v20 — cards are section header enough) */
 .index-info .index-header {
-  margin: 0 0 14px !important;
+  margin: 0 0 6px !important;
   padding: 0;
 }
 .index-info .index-header a {
   font-family: var(--serif);
   font-style: italic;
-  font-size: clamp(28px, 3.2vw, 38px);
-  font-weight: 400;
+  font-size: clamp(18px, 1.7vw, 22px);
+  font-weight: 500;
   color: var(--ink);
   text-decoration: none;
-  letter-spacing: 0.03em;
-  text-shadow: 0 1px 18px rgba(0,0,0,0.5);
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.55);
 }
-.index-info .index-header a:hover { color: var(--accent); }
+/* Fluid's `a { color: var(--post-link-color) }` makes every title link
+   blue. CSS var reassignment is the ONE way to override it cleanly — :visited
+   pseudo-class silently drops `color: ... !important` rules per browser
+   privacy policy, so we'd lose that fight. Override the CSS variable on
+   the blog route so ALL link colours (link / visited / hover) inherit
+   from the body's --ink. */
+body.route-blog {
+  --post-link-color: var(--ink);
+  --link-hover-color: var(--ink-dim);
+}
+/* The excerpt and meta aren't separate click targets; the title's stretched
+   link (below) covers the full card. */
+.index-info .index-excerpt,
+.index-info .index-btm {
+  pointer-events: none;
+  cursor: inherit;
+}
+/* stretched-link: ::after fills the entire .index-info card so the title
+   text is the click target of the whole card. We MUST NOT set
+   `position: relative` on the <a> itself, otherwise the `::after`'s
+   inset:0 anchors to the <a>'s box (just the title text) instead of
+   the parent .index-info. */
+.index-info .index-header a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
 
 .index-excerpt {
   font-family: var(--serif);
   color: var(--ink-dim);
-  font-size: 15px;
-  letter-spacing: 0.06em;
-  line-height: 1.85;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  line-height: 1.75;
   background: transparent !important;
   box-shadow: none !important;
+  position: relative;
+  z-index: 2;            /* sits on top of the stretched-link area */
 }
 .index-excerpt div { font-style: normal; }
 
-.index-btm { margin-top: 18px; padding: 0; }
+.index-btm { margin-top: 10px; padding: 0; }
 .index-btm .post-meta {
   color: var(--ink-mute) !important;
   background: transparent !important;
   font-family: var(--sans);
-  font-size: 12px;
-  letter-spacing: 0.3em;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  position: relative;
+  z-index: 2;            /* date still readable on top of stretched link */
 }
 .index-btm .post-meta i { color: var(--ink-mute); }
 .index-btm .post-meta time { color: var(--ink-dim); }
 
 /* divider between cards */
-.index-card + .index-card { position: relative; }
+.index-card + .index-card { margin-top: 0; }
 .index-card + .index-card::before {
   content: "";
   position: absolute;
-  left: 6vw; right: 6vw; top: 0;
+  left: 0; right: 6vw; top: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--ink-line), transparent);
+  background: linear-gradient(90deg, transparent, rgba(245,243,236,0.18), transparent);
 }
 
 /* ---- about page: transparent content layer over video ---- */
@@ -369,7 +488,7 @@ footer {
   z-index: 2;
   background: linear-gradient(180deg, rgba(10,10,12,0), rgba(10,10,12,0.55)) !important;
   border: 0 !important;
-  padding: 22px 0 22px 200px !important;
+  padding: 22px 0 22px 360px !important;
   margin: 0 !important;
 }
 footer .footer-content,
@@ -409,4 +528,13 @@ footer .footer-inner,
   .page-glass { padding: 10vh 6vw 4vh; }
   .index-card { padding: 0 6vw 12vh; }
   footer { padding: 24px 0 24px 18px !important; }
+  .cinema-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    padding: 14px 22px !important;
+  }
+  .cinema-feed { max-height: 240px; overflow-y: auto; padding-right: 12px; }
+  .cinema-signature { margin: 0 0 24px !important; }
+  .cinema-nav { flex-direction: row !important; gap: 18px !important; margin: 0 12px 0 0 !important; }
 }

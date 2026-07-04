@@ -2,6 +2,8 @@
 title: 关于我
 date: 2026-07-04 12:48:01
 layout: about
+aliases:
+  - /me
 ---
 
 ## 👋 你好，我是 qianhong

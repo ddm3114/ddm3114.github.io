@@ -1,16 +1,15 @@
 <%
   // ============================================================
   // Cinema shell — fixed background video + transparent content.
-  //   The video plays continuously behind every page; scroll does
-  //   not displace it. Content sits above with a slow gradient scrim.
-  // Inject via theme_inject.bodyBegin in scripts/cinema-inject.js
+  //   Sidebar (pure nav, nothing else): qianhong / me / blog + toggle
   // ============================================================
   var menu = (theme && theme.navbar && theme.navbar.menu) || [
-    { key: 'home',  link: '/',        name: '博客' },
-    { key: 'about', link: '/about/',   name: '介绍' }
+    { key: 'qianhong', link: '/qianhong/', name: 'qianhong' },
+    { key: 'about',    link: '/about/',     name: 'me' },
+    { key: 'home',     link: '/',          name: 'blog' }
   ]
-  var brand = (config && config.title) || 'qianhong'
   var video = '/video/hero.mp4'
+  var isHome = is_home()
 %>
 
 <!-- ALWAYS-on background. fixed + ken-burns. inline-style as a safety net -->
@@ -29,11 +28,8 @@
 <div class="letterbox letterbox-bottom"
      style="position:fixed !important; bottom:0 !important; left:0 !important; right:0 !important; height:1px !important; background:rgba(245,243,236,0.14) !important; z-index:2 !important; pointer-events:none !important;"></div>
 
-<!-- Transparent left sidebar -->
+<!-- Transparent left sidebar — nav only -->
 <aside class="cinema-sidebar" aria-label="<%= __('menu') || 'menu' %>">
-  <a class="cinema-brand" href="<%= url_for('/') %>" aria-label="home">
-    <span class="cinema-brand-q">q</span>
-  </a>
 
   <nav class="cinema-nav">
     <% for (const each of menu) { %>
