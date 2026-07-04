@@ -60,10 +60,17 @@
     var paused = sessionStorage.getItem('videoPaused') === '1';
 
     if (saved) {
+      /* hide video while seeking to saved position, poster stays visible */
+      vid.style.opacity = '0';
       vid.currentTime = parseFloat(saved);
+      vid.addEventListener('seeked', function onSeeked() {
+        vid.removeEventListener('seeked', onSeeked);
+        vid.style.opacity = '';
+      });
     }
-    if (!paused) {
-      vid.play();
+
+    if (paused) {
+      vid.pause();
     }
 
     vid.addEventListener('timeupdate', function () {
