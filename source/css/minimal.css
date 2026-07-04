@@ -82,7 +82,7 @@ nav#navbar, #navbar,
 .letterbox-top    { top: 0    !important; background: rgba(245,243,236,0.18) !important; }
 .letterbox-bottom { bottom: 0 !important; background: rgba(245,243,236,0.14) !important; }
 
-/* ---- transparent left sidebar ---- */
+/* ---- fully transparent left sidebar (no fill, no blur) ---- */
 .cinema-sidebar {
   position: fixed;
   top: 0; left: 0; bottom: 0;
@@ -91,10 +91,11 @@ nav#navbar, #navbar,
   flex-direction: column;
   align-items: stretch;
   padding: 7vh 22px 9vh;
-  background: rgba(10,10,12,0.18);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border-right: 1px solid var(--ink-line-soft);
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-right: 1px solid rgba(245,243,236,0.08);
   z-index: 20;
 }
 
@@ -106,9 +107,10 @@ nav#navbar, #navbar,
   justify-content: center;
   text-decoration: none;
   color: var(--ink);
-  border: 1px solid var(--ink-line);
+  border: 1px solid rgba(245,243,236,0.45);
   border-radius: 50%;
   margin: 0 0 12vh;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.6);
   transition: border-color .45s ease, color .45s ease;
 }
 .cinema-brand:hover { color: var(--accent); border-color: var(--accent); }
@@ -131,18 +133,20 @@ nav#navbar, #navbar,
 .cinema-nav-item {
   font-family: var(--serif);
   font-style: italic;
-  color: var(--ink-dim);
+  color: var(--ink);
   text-decoration: none;
   font-size: 17px;
   letter-spacing: 0.22em;
   padding: 6px 0 6px 16px;
   border-left: 1px solid transparent;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.6);
   transition: color .5s ease, border-color .5s ease, transform .5s ease;
 }
 .cinema-nav-item:hover { color: var(--ink); transform: translateX(3px); }
 .cinema-nav-item.is-active {
   color: var(--ink);
   border-left-color: var(--accent);
+  text-shadow: 0 0 14px rgba(216,201,138,0.45), 0 1px 12px rgba(0,0,0,0.6);
 }
 .cinema-nav-item .cinema-nav-zh {
   font-family: var(--serif);
@@ -154,7 +158,8 @@ nav#navbar, #navbar,
   align-self: flex-start;
   width: 28px; height: 28px;
   cursor: pointer;
-  opacity: 0.55;
+  opacity: 0.7;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6));
   transition: opacity .3s;
 }
 .cinema-mode-toggle:hover { opacity: 1; }
@@ -162,9 +167,9 @@ nav#navbar, #navbar,
   display: block;
   width: 18px; height: 18px;
   border-radius: 50%;
-  border: 1px solid var(--ink-dim);
+  border: 1px solid rgba(245,243,236,0.55);
   margin: 5px 0;
-  box-shadow: inset 4px -4px 0 0 var(--ink-dim);
+  box-shadow: inset 4px -4px 0 0 rgba(245,243,236,0.55);
 }
 
 /* ---- content area: transparent over video ---- */
