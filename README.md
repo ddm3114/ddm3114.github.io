@@ -45,7 +45,7 @@ npm run build
 
 ## 部署到 GitHub Pages 步骤
 
-1. 在 GitHub 创建仓库 `qianhong.github.io`（Public）
+1. 在 GitHub 创建仓库 `ddm3114.github.io`（Public）
 2. 本地初始化并推送：
    ```bash
    cd ~/blog
@@ -53,7 +53,7 @@ npm run build
    git checkout -b main
    git add .
    git commit -m "chore: initial blog setup"
-   git remote add origin git@github.com:qianhong/qianhong.github.io.git
+   git remote add origin git@github.com:ddm3114/ddm3114.github.io.git
    git push -u origin main
    ```
 3. 仓库 **Settings → Pages → Source** 选 **GitHub Actions**

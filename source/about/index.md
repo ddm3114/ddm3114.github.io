@@ -21,7 +21,7 @@ layout: about
 
 ### 联系方式
 
-- GitHub: [github.com/qianhong](https://github.com/qianhong)
+- GitHub: [github.com/ddm3114](https://github.com/ddm3114)
 - Email: 你的邮箱
 
 ---
