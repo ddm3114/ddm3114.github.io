@@ -159,7 +159,19 @@ header.innerHTML = '<h1 class="page-hero-title">diary</h1><p class="page-hero-su
 cp source/video/candidates/22-cars-road-timelapse.mp4 source/video/hero.mp4
 ```
 
-视频的静态封面图是 `source/img/hero-poster.jpg`（视频加载前显示），如果换了风格差异很大的视频，最好也更新封面图。
+换视频后需要额外做两件事：
+
+1. **更新封面图**（否则页面打开的第一帧会闪旧视频画面）：
+   ```bash
+   ffmpeg -i source/video/hero.mp4 -ss 2 -frames:v 1 -q:v 2 source/img/hero-poster.jpg -y
+   ```
+   这会截取视频第 2 秒的画面作为封面。
+
+2. **更新缓存版本号**（否则浏览器/CDN 缓存会继续播放旧视频）：
+   编辑 `source/_includes/cinema-shell.ejs`，把 `?v=3` 的数字加一：
+   ```javascript
+   var video = '/video/hero.mp4?v=4'   // 每次换视频加 1
+   ```
 
 ## 导航栏配置
 
@@ -225,13 +237,44 @@ npx hexo server                        # 本地预览 http://localhost:4000
 npx hexo server -p 4001               # 指定端口
 ```
 
-部署：推到 main 分支，GitHub Actions 自动构建部署。
+### 部署到线上
+
+推到 main 分支即可，GitHub Actions 会自动构建并部署到 GitHub Pages：
 
 ```bash
 git add .
 git commit -m "描述改了什么"
 git push origin main
 ```
+
+推送后 1-2 分钟自动部署完成，访问 https://ddm3114.github.io 查看。
+
+### 部署原理
+
+```
+git push origin main
+    ↓
+GitHub Actions 自动触发（.github/workflows/deploy.yml）
+    ↓
+在云端执行 npm ci + npx hexo generate
+    ↓
+生成的 public/ 通过 actions/deploy-pages 部署到 GitHub Pages
+    ↓
+https://ddm3114.github.io 更新
+```
+
+**关键配置**：
+- `.github/workflows/deploy.yml` — CI/CD 工作流脚本，定义构建和部署步骤
+- GitHub 仓库 Settings → Pages → Source 必须设为 **"GitHub Actions"**（不是 "Deploy from a branch"）
+
+### 部署失败怎么办
+
+1. 去 https://github.com/ddm3114/ddm3114.github.io/actions 查看日志
+2. 如果是 "Deployment failed, try again later"（GitHub 瞬时错误），推一个空提交重试：
+   ```bash
+   git commit --allow-empty -m "chore: re-trigger deploy" && git push origin main
+   ```
+3. 如果是构建错误（npm/hexo 报错），看日志修代码再推
 
 ## 注意事项
 
