@@ -104,6 +104,27 @@ layout: page
 
 front-matter 中的 `layout: about` 不要改。
 
+### 页面顶部标题/副标题
+
+about 和 diary 页面顶部各有一行标题和副标题，修改方式不同：
+
+**about 页面**（"qianhong" + "记录、随笔与思考。"）：
+在 `_config.fluid.yml` 约第 1004-1005 行，修改 Fluid 的 about 配置：
+
+```yaml
+name: "qianhong"
+intro: "记录、随笔与思考。"
+```
+
+**diary 页面**（"diary" + "随手写，不讲究。"）：
+在 `source/js/cinema.js` 中搜索 `page-hero`，找到这一行：
+
+```javascript
+header.innerHTML = '<h1 class="page-hero-title">diary</h1><p class="page-hero-subtitle">随手写，不讲究。</p>';
+```
+
+直接改引号里的文字即可。样式在 `source/css/minimal.css` 的 `.page-hero` 相关规则中。
+
 ### 5. 修改首页段子/slogan
 
 编辑 `source/_data/quotes.yml`，一行一条，YAML 列表格式：
@@ -173,15 +194,16 @@ menu:
 | 6. Main content | 内容区域布局 | 改内容区宽度、边距 |
 | 7. Blog slogan | 段子/引言样式 | 改段子字体、分隔线 |
 | 8. Blog post list | 首页卡片列表 | 改卡片间距、hover 效果 |
-| 9. Page: diary | 日记页 | 改日期标签、日记排版 |
-| 10. Page: papers | 论文列表页 | 改论文卡片样式 |
-| 11. Page: about/me | 个人介绍页 | 改介绍页排版 |
-| 12. Hide Fluid TOC | 隐藏侧边目录 | 一般不动 |
-| 13. Post typography | 文章正文排版 | 改标题、段落、引用、列表样式 |
-| 14. Code blocks | 代码块（终端风格） | 改代码块配色、语法高亮 |
-| 15. Tables | 表格 | 改表格样式 |
-| 16. Footer | 页脚 | 改页脚样式 |
-| 17. Mobile responsive | 移动端适配 | 改手机端布局 |
+| 9. Page hero | 页面顶部标题（diary） | 改 diary 标题/副标题样式 |
+| 10. Page: diary | 日记页 | 改日期标签、日记排版 |
+| 11. Page: papers | 论文列表页 | 改论文卡片样式 |
+| 12. Page: about/me | 个人介绍页 | 改介绍页排版 |
+| 13. Hide Fluid TOC | 隐藏侧边目录 | 一般不动 |
+| 14. Post typography | 文章正文排版 | 改标题、段落、引用、列表样式 |
+| 15. Code blocks | 代码块（终端风格） | 改代码块配色、语法高亮 |
+| 16. Tables | 表格 | 改表格样式 |
+| 17. Footer | 页脚 | 改页脚样式 |
+| 18. Mobile responsive | 移动端适配 | 改手机端布局 |
 
 ### 常见样式修改
 

@@ -26,6 +26,17 @@
     }
   });
 
+  /* ---- diary page header ---- */
+  if (document.body.classList.contains('route-diary')) {
+    var board = document.getElementById('board');
+    if (board) {
+      var header = document.createElement('div');
+      header.className = 'page-hero';
+      header.innerHTML = '<h1 class="page-hero-title">diary</h1><p class="page-hero-subtitle">随手写，不讲究。</p>';
+      board.parentNode.insertBefore(header, board);
+    }
+  }
+
   /* ---- slogan (random quote above post list, blog + papers) ---- */
   if (document.body.classList.contains('route-blog') || document.body.classList.contains('route-papers')) {
     var el = document.getElementById('cinema-quotes');
