@@ -2,6 +2,8 @@
 
 基于 Hexo + Fluid 的个人博客，电影感视觉风格（全屏视频背景 + 透明侧边栏）。
 
+> 部署在 GitHub Pages：[ddm3114.github.io](https://ddm3114.github.io)
+
 ## 快速开始
 
 ```bash
