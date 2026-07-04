@@ -1,0 +1,57 @@
+<%
+  // ============================================================
+  // Cinema shell — overrides Fluid top navbar + empty banner
+  //                  - left transparent sidebar (博客 / 介绍)
+  //                  - home page only: fullscreen video hero w/ letterbox
+  // Inject via theme_inject.bodyBegin in _config.yml
+  // ============================================================
+  var isHome = is_home()
+  var menu = (theme && theme.navbar && theme.navbar.menu) || [
+    { key: 'home',  link: '/',        name: '博客' },
+    { key: 'about', link: '/about/',   name: '介绍' }
+  ]
+  var brand = (config && config.title) || 'qianhong'
+%>
+
+<aside class="cinema-sidebar" aria-label="<%= __('menu') || 'menu' %>">
+  <a class="cinema-brand" href="<%= url_for('/') %>" aria-label="home">
+    <span class="cinema-brand-q">q</span>
+  </a>
+
+  <nav class="cinema-nav">
+    <% for (const each of menu) { %>
+      <% if (!each.link) continue %>
+      <% var text = each.name || (each.key ? __(each.key + '.menu') : '') || (each.key ? __(each.key + '.title') : '') || each.key %>
+      <a class="cinema-nav-item" href="<%= url_for(each.link) %>" data-key="<%= each.key %>">
+        <span class="cinema-nav-zh"><%- text %></span>
+      </a>
+    <% } %>
+  </nav>
+
+  <div class="cinema-mode-toggle" id="cinema-mode-toggle" role="button" tabindex="0" aria-label="toggle theme">
+    <i class="cinema-mode-icon"></i>
+  </div>
+</aside>
+
+<% if (isHome) { %>
+<section class="hero-section">
+  <video class="hero-video" autoplay loop muted playsinline preload="auto" poster="/img/hero-poster.jpg">
+    <source src="/video/hero.mp4" type="video/mp4">
+  </video>
+
+  <div class="hero-overlay"></div>
+
+  <div class="hero-letterbox hero-letterbox-top"></div>
+  <div class="hero-letterbox hero-letterbox-bottom"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title"><%= brand %></h1>
+    <div class="hero-sub">记录 · 随笔 · 思考</div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>scroll</span>
+    <i class="hero-scroll-line"></i>
+  </div>
+</section>
+<% } %>
