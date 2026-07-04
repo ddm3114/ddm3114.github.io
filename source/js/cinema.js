@@ -53,35 +53,15 @@
       }
     }
   }
-  /* ---- video continuity across page navigations ---- */
+  /* ---- video pause/play toggle ---- */
   var vid = document.querySelector('.bg-video');
   if (vid) {
-    var saved = sessionStorage.getItem('heroTime');
     var paused = sessionStorage.getItem('videoPaused') === '1';
-
-    if (saved) {
-      /* hide video while seeking to saved position, poster stays visible */
-      vid.style.opacity = '0';
-      vid.currentTime = parseFloat(saved);
-      vid.addEventListener('seeked', function onSeeked() {
-        vid.removeEventListener('seeked', onSeeked);
-        vid.style.opacity = '';
-      });
-    }
-
-    if (paused) {
-      vid.pause();
-    }
-
-    vid.addEventListener('timeupdate', function () {
-      sessionStorage.setItem('heroTime', vid.currentTime);
-    });
-
-    /* ---- video pause/play toggle ---- */
     var btn = document.getElementById('video-toggle');
     var icon = document.getElementById('video-toggle-icon');
 
     if (paused) {
+      vid.pause();
       icon.textContent = '▶';
     }
 
