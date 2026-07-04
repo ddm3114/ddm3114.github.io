@@ -383,7 +383,7 @@ navbar:
   # 导航栏菜单，可自行增减，key 用来关联 languages/*.yml，如不存在关联则显示 key 本身的值；icon 是 css class，可以省略；增加 name 可以强制显示指定名称
   # Navigation bar menu. `key` is used to associate languages/*.yml. If there is no association, the value of `key` itself will be displayed; if `icon` is a css class, it can be omitted; adding `name` can force the display of the specified name
   menu:
-    - { key: "about",  link: "/about/",   name: "qianhong", icon: "iconfont icon-user-fill" }
+    - { key: "about",  link: "/about/",   name: "me",       icon: "iconfont icon-user-fill" }
     - { key: "home",   link: "/",        name: "blog",     icon: "iconfont icon-home-fill" }
 
 # 搜索功能，基于 hexo-generator-search 插件，若已安装其他搜索插件请关闭此功能，以避免生成多余的索引文件
