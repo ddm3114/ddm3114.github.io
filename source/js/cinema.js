@@ -57,20 +57,24 @@
   var vid = document.querySelector('.bg-video');
   if (vid) {
     var saved = sessionStorage.getItem('heroTime');
+    var paused = sessionStorage.getItem('videoPaused') === '1';
+
     if (saved) {
       vid.currentTime = parseFloat(saved);
     }
+    if (!paused) {
+      vid.play();
+    }
+
     vid.addEventListener('timeupdate', function () {
       sessionStorage.setItem('heroTime', vid.currentTime);
     });
 
     /* ---- video pause/play toggle ---- */
-    var paused = sessionStorage.getItem('videoPaused') === '1';
     var btn = document.getElementById('video-toggle');
     var icon = document.getElementById('video-toggle-icon');
 
     if (paused) {
-      vid.pause();
       icon.textContent = '▶';
     }
 
