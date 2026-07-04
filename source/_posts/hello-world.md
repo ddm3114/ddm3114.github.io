@@ -1,8 +1,6 @@
 ---
 title: 你好，世界
 date: 2026-07-04 12:00:00
-categories: [随笔]
-tags: [开篇, Hello]
 description: 博客开篇，记录开始
 ---
 

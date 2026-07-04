@@ -1,0 +1,8 @@
+/* Minimal overrides */
+header .banner { display: none !important; }
+header.header-inner { height: auto !important; min-height: 0 !important; }
+/* Hide the banner-text + scroll-down-bar inside any banner */
+.banner .banner-text, .banner .scroll-down-bar { display: none !important; }
+/* About page: hide banner + avatar block */
+.about-avatar, .about-icons { display: none !important; }
+.about-page .banner, body[class*='about'] .banner, .about .banner { display: none !important; }
