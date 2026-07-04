@@ -53,4 +53,15 @@
       }
     }
   }
+  /* ---- video continuity across page navigations ---- */
+  var vid = document.querySelector('.bg-video');
+  if (vid) {
+    var saved = sessionStorage.getItem('heroTime');
+    if (saved) {
+      vid.currentTime = parseFloat(saved);
+    }
+    vid.addEventListener('timeupdate', function () {
+      sessionStorage.setItem('heroTime', vid.currentTime);
+    });
+  }
 })();
