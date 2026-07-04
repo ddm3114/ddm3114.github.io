@@ -70,29 +70,28 @@ nav#navbar, #navbar,
     linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.20) 22%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.72) 100%);
 }
 
-/* ---- cinematic letterbox (fixed, very thin) ---- */
+/* ---- cinematic letterbox (fixed, asymmetric) ---- */
 .letterbox {
   position: fixed !important;
   left: 0 !important;
   right: 0 !important;
-  height: 5.5vh !important;
   background: #000 !important;
   z-index: 2 !important;
   pointer-events: none !important;
 }
-.letterbox-top    { top: 0 !important; }
-.letterbox-bottom { bottom: 0 !important; }
+.letterbox-top    { top: 0 !important;    height: 3.5vh !important; }
+.letterbox-bottom { bottom: 0 !important; height: 7vh   !important; }
 
 /* ---- transparent left sidebar ---- */
 .cinema-sidebar {
   position: fixed;
-  top: 5.5vh; left: 0; bottom: 5.5vh;
-  width: 76px;
+  top: 3.5vh; left: 0; bottom: 7vh;
+  width: 110px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 30px 0 24px;
-  background: linear-gradient(180deg, rgba(10,10,12,0.40), rgba(10,10,12,0.62));
+  align-items: stretch;
+  padding: 26px 16px 22px;
+  background: linear-gradient(180deg, rgba(10,10,12,0.40), rgba(10,10,12,0.66));
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-right: 1px solid var(--ink-line-soft);
@@ -101,6 +100,7 @@ nav#navbar, #navbar,
 
 .cinema-brand {
   display: flex;
+  align-self: center;
   width: 42px; height: 42px;
   align-items: center;
   justify-content: center;
@@ -108,7 +108,7 @@ nav#navbar, #navbar,
   color: var(--ink);
   border: 1px solid var(--ink-line);
   border-radius: 50%;
-  margin-bottom: 56px;
+  margin: 6px 0 60px;
   transition: border-color .45s ease, color .45s ease;
 }
 .cinema-brand:hover { color: var(--accent); border-color: var(--accent); }
@@ -123,9 +123,9 @@ nav#navbar, #navbar,
 .cinema-nav {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 28px;
   flex: 1;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .cinema-nav-item {
@@ -134,15 +134,25 @@ nav#navbar, #navbar,
   color: var(--ink-dim);
   text-decoration: none;
   font-size: 16px;
-  writing-mode: vertical-rl;
-  letter-spacing: 0.42em;
-  padding: 4px 2px;
-  transition: color .5s ease, transform .5s ease;
+  /* horizontal text */
+  letter-spacing: 0.18em;
+  padding: 6px 0 6px 14px;
+  border-left: 1px solid transparent;
+  transition: color .5s ease, border-color .5s ease, transform .5s ease;
 }
-.cinema-nav-item:hover { color: var(--ink); transform: translateY(-1px); }
-.cinema-nav-item.is-active { color: var(--accent); }
+.cinema-nav-item:hover { color: var(--ink); transform: translateX(2px); }
+.cinema-nav-item.is-active {
+  color: var(--ink);
+  border-left-color: var(--accent);
+}
+.cinema-nav-item .cinema-nav-zh {
+  font-family: var(--serif);
+  font-style: italic;
+  letter-spacing: 0.22em;
+}
 
 .cinema-mode-toggle {
+  align-self: center;
   width: 28px; height: 28px;
   cursor: pointer;
   opacity: 0.55;
@@ -162,7 +172,7 @@ nav#navbar, #navbar,
 main {
   position: relative;
   z-index: 3 !important;
-  padding: 0 0 0 100px;   /* leave space for sidebar */
+  padding: 0 0 0 130px;   /* leave space for sidebar */
   min-height: 100vh;
   background: transparent !important;
 }
@@ -388,16 +398,12 @@ footer .footer-inner,
     border-right: none;
     border-bottom: 1px solid var(--ink-line-soft);
   }
-  .letterbox { height: 4vh; }
-  .letterbox-bottom { display: none; }   /* mobile already has chrome, fullscreen video here */
-  .cinema-brand { margin-bottom: 0; margin-right: 22px; }
+  .cinema-brand { margin: 0 22px 0 0; align-self: center; }
   .cinema-nav { flex-direction: row; gap: 22px; flex: none; }
-  .cinema-nav-item {
-    writing-mode: horizontal-tb;
-    letter-spacing: 0.25em;
-    font-size: 13px;
-  }
+  .cinema-nav-item { letter-spacing: 0.18em; font-size: 13px; padding: 4px 0 4px 8px; }
   .cinema-mode-toggle { display: none; }
+  .letterbox-top    { height: 3vh !important; }
+  .letterbox-bottom { display: none; }   /* mobile already has chrome, fullscreen video here */
   .page-glass { padding: 10vh 6vw 4vh; }
   .index-card { padding: 0 6vw 12vh; }
   footer { padding: 24px 0 24px 18px !important; }
