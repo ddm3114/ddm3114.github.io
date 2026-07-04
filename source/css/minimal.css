@@ -1,6 +1,28 @@
-/* qianhong cinematic — fixed background video, transparent content */
+/*
+ * minimal.css — cinematic blog theme
+ *
+ * TABLE OF CONTENTS
+ * -----------------
+ * 1. Tokens (CSS variables)
+ * 2. Reset & base
+ * 3. Kill Fluid chrome
+ * 4. Background video + scrim + letterbox
+ * 5. Sidebar nav
+ * 6. Main content area
+ * 7. Blog slogan
+ * 8. Blog post list (index cards)
+ * 9. Page: diary
+ * 10. Page: papers
+ * 11. Page: about/me
+ * 12. Hide Fluid TOC
+ * 13. Post page typography (headings, paragraphs, lists, etc.)
+ * 14. Code blocks (terminal aesthetic)
+ * 15. Tables
+ * 16. Footer
+ * 17. Mobile responsive
+ */
 
-/* ---- tokens ---- */
+/* ---- 1. tokens ---- */
 :root {
   --ink: #f5f3ec;
   --ink-dim: rgba(245, 243, 236, 0.74);
@@ -11,12 +33,15 @@
   --accent: #d8c98a;
   --serif: "Songti SC", "STSong", "Songti TC", "宋体", SimSun, "Noto Serif SC", "Source Han Serif SC", "Cormorant Garamond", Georgia, serif;
   --sans:  "Helvetica Neue", "Inter", "Source Han Sans SC", "Noto Sans SC", system-ui, sans-serif;
+  --highlight-bg-color: transparent !important;
+  --inlinecode-bg-color: rgba(245,243,236,0.06) !important;
+  --board-bg-color: transparent !important;
 }
 
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; box-sizing: border-box; }
 
 html, body {
-  background: #000 !important;     /* fallback before video paints */
+  background: #000 !important;
   color: var(--ink);
   font-family: var(--serif);
   font-weight: 400;
@@ -41,15 +66,10 @@ nav#navbar, #navbar,
 .bg-video {
   position: fixed !important;
   inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  min-width: 100vw !important;
-  min-height: 100vh !important;
   object-fit: cover !important;
   z-index: 0 !important;
-  /* Long take: slow forward push + tiny pan. 30s cycle. */
   animation: bgBreath 30s ease-in-out infinite alternate;
   will-change: transform;
   pointer-events: none;
@@ -59,7 +79,7 @@ nav#navbar, #navbar,
   100% { transform: scale(1.18) translate3d(-2.4%, -1.6%, 0); }
 }
 
-/* ---- gradient scrim on top of video (transparent-ish middle) ---- */
+/* ---- gradient scrim on top of video ---- */
 .bg-scrim {
   position: fixed !important;
   inset: 0 !important;
@@ -70,7 +90,7 @@ nav#navbar, #navbar,
     linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.20) 22%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.72) 100%);
 }
 
-/* ---- cinematic letterbox (thin accent line, not solid black bar) ---- */
+/* ---- cinematic letterbox (thin accent lines) ---- */
 .letterbox {
   position: fixed !important;
   left: 0 !important;
@@ -82,11 +102,11 @@ nav#navbar, #navbar,
 .letterbox-top    { top: 0    !important; background: rgba(245,243,236,0.18) !important; }
 .letterbox-bottom { bottom: 0 !important; background: rgba(245,243,236,0.14) !important; }
 
-/* ---- fully transparent left sidebar (no fill, no blur) ---- */
+/* ---- transparent left sidebar ---- */
 .cinema-sidebar {
   position: fixed;
   top: 0; left: 0; bottom: 0;
-  width: 320px;
+  width: 280px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -97,31 +117,19 @@ nav#navbar, #navbar,
   -webkit-backdrop-filter: none !important;
   border-right: 1px solid rgba(245,243,236,0.08);
   z-index: 20;
-  overflow-y: auto;             /* if many posts, scroll within the column */
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(245,243,236,0.12) transparent;
 }
 
-/* 1. signature (decorative, NOT a link) */
-.cinema-signature {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--ink-dim);
-  letter-spacing: 0.22em;
-  text-shadow: 0 1px 12px rgba(0,0,0,0.65);
-  margin: 0 0 6vh;
-  user-select: none;
-  cursor: default;
-}
-
-/* 2. nav (qianhong / me / blog) */
+/* nav links */
 .cinema-nav {
   display: flex;
   flex-direction: column;
-  gap: 7vh;
-  margin: 0 0 8vh;
+  justify-content: center;
+  flex: 1;
+  gap: 5vh;
+  margin: 0;
 }
 
 .cinema-nav-item {
@@ -142,156 +150,39 @@ nav#navbar, #navbar,
   text-shadow: 0 0 14px rgba(216,201,138,0.45), 0 1px 12px rgba(0,0,0,0.6);
 }
 
-/* 3. embedded post feed (transparent cards stacked vertically) */
-.cinema-feed {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  margin-bottom: 6vh;
-}
-
-.cinema-card {
-  display: block;
-  text-decoration: none;
-  padding: 12px 0 14px;
-  border-left: 1px solid rgba(245,243,236,0.10);
-  padding-left: 14px;
-  transition: border-color .4s ease, transform .4s ease;
-}
-.cinema-card:hover {
-  border-left-color: var(--accent);
-  transform: translateX(2px);
-}
-.cinema-card-title {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 17px;
-  color: var(--ink);
-  letter-spacing: 0.05em;
-  margin-bottom: 4px;
-  text-shadow: 0 1px 12px rgba(0,0,0,0.65);
-}
-.cinema-card:hover .cinema-card-title { color: var(--accent); }
-.cinema-card-excerpt {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--ink-mute);
-  letter-spacing: 0.04em;
-  line-height: 1.55;
-  text-shadow: 0 1px 10px rgba(0,0,0,0.55);
-}
-
-.cinema-mode-toggle {
-  align-self: flex-start;
-  width: 28px; height: 28px;
-  cursor: pointer;
-  opacity: 0.7;
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6));
-  transition: opacity .3s;
-}
-.cinema-mode-toggle:hover { opacity: 1; }
-.cinema-mode-icon {
-  display: block;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(245,243,236,0.55);
-  margin: 5px 0;
-  box-shadow: inset 4px -4px 0 0 rgba(245,243,236,0.55);
-}
-
 /* ---- content area: transparent over video ---- */
 main {
   position: relative;
   z-index: 3 !important;
-  padding: 0 6vw 0 280px;   /* closer to sidebar */
+  padding: 0 6vw 0 300px;
   min-height: 100vh;
   background: transparent !important;
 }
-@media (max-width: 768px) {
-  main { padding: 0 0 0 0; }
-}
 
-/* ---- Home is the blog list (1 column wide).
-   On / the Fluid .index-card renders the post list — keep it. ---- */
-#board { background: transparent !important; border: 0 !important; padding: 0 !important; }
-#board::before, #board::after { display: none !important; }
-#board h1 { display: none !important; }   /* hide "qianhong" duplicate h1 on home */
-
-/* ---- The /qianhong signature page ---- */
-body.route-qianhong .page-content {
-  margin: 0 !important;
-  padding: 22vh 6vw 0 !important;
-  max-width: 760px;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-body.route-qianhong .page-content h1,
-body.route-qianhong .page-content h2,
-body.route-qianhong .page-content h3 {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(40px, 6vw, 88px);
-  letter-spacing: 0.04em;
-  line-height: 1.22;
-  color: var(--ink);
-  text-shadow: 0 2px 36px rgba(0,0,0,0.7);
-  margin: 0 0 22px 0;
-  padding-bottom: 18px;
-  border-bottom: 1px solid rgba(245,243,236,0.18);
-}
-body.route-qianhong .page-content p,
-body.route-qianhong .page-content ul {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 17px;
-  line-height: 1.95;
-  letter-spacing: 0.04em;
-  color: var(--ink-dim);
-}
-
-/* Optional: a thin dark glass band at the top of main for poster header */
-.page-glass {
-  margin: 0 0 0 0;
-  padding: 12vh 5vw 4vh;
-  text-align: center;
-  border-bottom: 1px solid var(--ink-line-soft);
-  background: linear-gradient(180deg, rgba(10,10,12,0.55), rgba(10,10,12,0));
-}
-.page-glass .page-eyebrow {
-  font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: 0.6em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-bottom: 14px;
-}
-.page-glass h1 {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(48px, 8vw, 110px);
-  color: var(--ink);
-  letter-spacing: 0.04em;
-  margin: 0;
-  text-shadow: 0 2px 36px rgba(0,0,0,0.7);
+/* ---- blog slogan (above post list) ---- */
+.blog-slogan {
+  padding: 14vh 0 0;
+  max-width: 720px;
   animation: fadeUp 1.6s ease-out 0.2s both;
 }
-.page-glass .page-sub {
+.blog-slogan-text {
   font-family: var(--serif);
   font-style: italic;
-  color: var(--ink-dim);
-  font-size: clamp(13px, 1.2vw, 16px);
-  letter-spacing: 0.4em;
-  padding-left: 0.4em;
-  margin-top: 12px;
-  animation: fadeUp 1.6s ease-out 0.5s both;
+  font-size: clamp(18px, 2vw, 26px);
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  margin: 0;
+  padding: 0 0 4vh 14px;
+  border-left: 2px solid var(--accent);
+  text-shadow: 0 1px 18px rgba(0,0,0,0.6);
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+.blog-slogan::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 2vh;
+  background: linear-gradient(90deg, rgba(245,243,236,0.22), rgba(245,243,236,0.06), transparent);
 }
 
 /* ---- blog post list (home) ---- */
@@ -300,7 +191,10 @@ body.route-qianhong .page-content ul {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+  padding: 0 !important;
 }
+#board::before, #board::after { display: none !important; }
+#board h1 { display: none !important; }
 #board > .container,
 .row.mx-auto.index-card {
   background: transparent !important;
@@ -308,20 +202,18 @@ body.route-qianhong .page-content ul {
 }
 
 .index-card {
-  margin-top: 12vh;
-  padding: 0 0 14vh 280px;       /* cards sit just right of sidebar */
+  margin: 0 !important;
+  padding: 0;
   position: relative;
 }
-/* Bootstrap's `.row > .mx-auto` would push the row to the right edge (margin auto).                       */
-/* High-specificity override keeps it next to the sidebar. We need (0,2,0)+!important from row container. */
+
 body.route-blog .row.mx-auto.index-card {
   margin-left: 0 !important;
   margin-right: auto !important;
   max-width: 720px;
 }
 
-/* The actual post card band. Hover lights up the whole thing uniformly —
-   background + left border only. No per-element color change. */
+/* post card */
 .index-info {
   padding: 18px 22px 22px 22px !important;
   margin-left: -22px;
@@ -337,7 +229,6 @@ body.route-blog .row.mx-auto.index-card {
   border-left-color: var(--accent) !important;
 }
 
-/* (blog-intro removed in v20 — cards are section header enough) */
 .index-info .index-header {
   margin: 0 0 6px !important;
   padding: 0;
@@ -352,28 +243,20 @@ body.route-blog .row.mx-auto.index-card {
   letter-spacing: 0.04em;
   text-shadow: 0 1px 12px rgba(0,0,0,0.55);
 }
-/* Fluid's `a { color: var(--post-link-color) }` makes every title link
-   blue. CSS var reassignment is the ONE way to override it cleanly — :visited
-   pseudo-class silently drops `color: ... !important` rules per browser
-   privacy policy, so we'd lose that fight. Override the CSS variable on
-   the blog route so ALL link colours (link / visited / hover) inherit
-   from the body's --ink. */
+
+/* Override Fluid's link colors on blog route */
 body.route-blog {
   --post-link-color: var(--ink);
   --link-hover-color: var(--ink-dim);
 }
-/* The excerpt and meta aren't separate click targets; the title's stretched
-   link (below) covers the full card. */
+
 .index-info .index-excerpt,
 .index-info .index-btm {
   pointer-events: none;
   cursor: inherit;
 }
-/* stretched-link: ::after fills the entire .index-info card so the title
-   text is the click target of the whole card. We MUST NOT set
-   `position: relative` on the <a> itself, otherwise the `::after`'s
-   inset:0 anchors to the <a>'s box (just the title text) instead of
-   the parent .index-info. */
+
+/* stretched-link for full-card click */
 .index-info .index-header a::after {
   content: "";
   position: absolute;
@@ -390,7 +273,7 @@ body.route-blog {
   background: transparent !important;
   box-shadow: none !important;
   position: relative;
-  z-index: 2;            /* sits on top of the stretched-link area */
+  z-index: 2;
 }
 .index-excerpt div { font-style: normal; }
 
@@ -402,7 +285,7 @@ body.route-blog {
   font-size: 11px;
   letter-spacing: 0.28em;
   position: relative;
-  z-index: 2;            /* date still readable on top of stretched link */
+  z-index: 2;
 }
 .index-btm .post-meta i { color: var(--ink-mute); }
 .index-btm .post-meta time { color: var(--ink-dim); }
@@ -417,7 +300,81 @@ body.route-blog {
   background: linear-gradient(90deg, transparent, rgba(245,243,236,0.18), transparent);
 }
 
-/* ---- about page: transparent content layer over video ---- */
+/* ---- /diary page ---- */
+body.route-diary .page-content {
+  margin: 0 !important;
+  padding: 12vh 0 0 !important;
+  max-width: 660px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+body.route-diary .page-content p,
+body.route-diary .page-content ul {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.95;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+}
+/* diary date headings — h2 used as date stamps */
+body.route-diary .page-content h2 {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.35em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  margin: 4em 0 1.2em;
+  padding: 0;
+  border: none;
+  position: relative;
+}
+body.route-diary .page-content h2::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(245,243,236,0.2);
+  margin-top: 8px;
+}
+/* first diary entry needs no extra top margin */
+body.route-diary .page-content h2:first-child {
+  margin-top: 0;
+}
+body.route-diary .page-content hr {
+  border: none !important;
+  background: none !important;
+  height: auto;
+  text-align: center;
+  margin: 3em 0;
+}
+body.route-diary .page-content hr::after {
+  content: "· · ·";
+  display: block;
+  color: rgba(245,243,236,0.28);
+  font-size: 18px;
+  letter-spacing: 0.8em;
+}
+
+/* ---- /papers page (reuses blog index styling) ---- */
+body.route-papers #board {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.route-papers .row.mx-auto.index-card {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  max-width: 720px;
+}
+body.route-papers {
+  --post-link-color: var(--ink);
+  --link-hover-color: var(--ink-dim);
+}
+
+/* ---- about page ---- */
 .about-content {
   color: var(--ink);
   font-family: var(--serif);
@@ -438,57 +395,406 @@ body.route-blog {
 }
 .about-content a { color: var(--accent); }
 
-/* ---- post page ---- */
-.post-body, .post-content {
-  background: transparent !important;
-  font-family: var(--serif) !important;
-  font-size: 17px;
-  line-height: 1.95;
-  letter-spacing: 0.03em;
-  color: var(--ink);
-  padding: 4vh 6vw 14vh;
-  max-width: 760px;
-  margin: 0 auto;
+/* ---- hide Fluid's TOC sidebar on post pages ---- */
+.sidebar-toc-wrapper,
+.tocbot,
+.toc-fixed,
+.sidebar-fixed,
+.col-lg-3.nopadding-md,
+.col-lg-2.nopadding-md,
+aside.sidebar-right,
+#toc, .toc,
+.category-bar-wrapper {
+  display: none !important;
 }
-.post-content h1, .post-content h2, .post-content h3,
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--ink);
+.col-lg-7, .col-lg-8, .col-lg-9 {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
 }
-.markdown-body { color: var(--ink); line-height: 1.95; }
 
-/* subtle anchor icon — keep low contrast */
-.post-content .headerlink, .markdown-body .headerlink { opacity: 0.15; }
+/* ============================================================
+   POST PAGE — cinematic typography
+   Philosophy: restraint. No colored borders, no decorative dots.
+   Hierarchy through size, weight, opacity, and whitespace only.
+   Like a film's end credits or a Criterion booklet.
+   ============================================================ */
 
-/* post header */
 .post-header, .post-title-row {
   background: transparent !important;
   border: 0 !important;
 }
+
+/* post title — the hero moment */
 h1#seo-header, .post-title {
   font-family: var(--serif) !important;
   font-style: italic !important;
-  font-weight: 400 !important;
+  font-weight: 300 !important;
+  font-size: clamp(30px, 4vw, 52px) !important;
   color: var(--ink) !important;
-  text-shadow: 0 1px 24px rgba(0,0,0,0.6) !important;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.5) !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.3 !important;
+  margin-bottom: 8px !important;
 }
 
-/* code blocks: keep readable on dark */
-.post-content pre, .markdown-body pre,
+/* post meta — small, spaced, faded */
+.post-meta-container .post-meta,
+.post-meta-container {
+  color: var(--ink-mute) !important;
+  font-family: var(--sans) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.35em !important;
+  text-transform: uppercase !important;
+}
+
+/* body container */
+.post-body, .post-content {
+  background: transparent !important;
+  font-family: var(--serif) !important;
+  font-size: 17px;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  padding: 6vh 0 16vh;
+  max-width: 660px;
+  margin: 0;
+}
+.markdown-body {
+  color: var(--ink);
+  line-height: 2;
+  background: transparent !important;
+}
+
+/* ---- headings: size + opacity, nothing else ---- */
+.post-content h1, .post-content h2, .post-content h3, .post-content h4,
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+  font-family: var(--serif) !important;
+  font-weight: 400;
+  color: var(--ink);
+  border: none !important;
+  padding: 0;
+  position: relative;
+  letter-spacing: 0.04em;
+}
+.post-content h2, .markdown-body h2 {
+  font-size: clamp(22px, 2.4vw, 32px);
+  margin: 3em 0 1em;
+  font-style: italic;
+}
+.post-content h2::after, .markdown-body h2::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: rgba(245,243,236,0.25);
+  margin-top: 10px;
+}
+.post-content h3, .markdown-body h3 {
+  font-size: clamp(17px, 1.6vw, 22px);
+  margin: 2.4em 0 0.8em;
+  color: var(--ink-dim);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+.post-content h4, .markdown-body h4 {
+  font-size: 15px;
+  margin: 2em 0 0.6em;
+  color: var(--ink-mute);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--sans) !important;
+  font-weight: 500;
+}
+.post-content .headerlink, .markdown-body .headerlink {
+  opacity: 0;
+  transition: opacity .3s;
+}
+.post-content h2:hover .headerlink, .post-content h3:hover .headerlink,
+.markdown-body h2:hover .headerlink, .markdown-body h3:hover .headerlink {
+  opacity: 0.25;
+}
+
+/* ---- paragraphs ---- */
+.post-content p, .markdown-body p {
+  margin: 0 0 1.6em;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+}
+
+/* ---- blockquote: indent + dim, no border ---- */
+.post-content blockquote, .markdown-body blockquote {
+  border: none !important;
+  background: none !important;
+  margin: 2em 0;
+  padding: 0 0 0 2em;
+  color: var(--ink-dim);
+  font-style: italic;
+  position: relative;
+}
+.post-content blockquote::before, .markdown-body blockquote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  bottom: 0.3em;
+  width: 1px;
+  background: rgba(245,243,236,0.18);
+}
+.post-content blockquote p, .markdown-body blockquote p {
+  margin-bottom: 0.8em;
+  font-size: 16px;
+  line-height: 1.9;
+}
+.post-content blockquote p:last-child, .markdown-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- lists: clean, no custom bullets ---- */
+.post-content ul, .markdown-body ul {
+  list-style: disc;
+  padding-left: 1.4em;
+  margin: 1.2em 0;
+  color: var(--ink);
+}
+.post-content ul li, .markdown-body ul li {
+  padding-left: 0;
+  margin-bottom: 0.5em;
+  line-height: 1.85;
+}
+.post-content ul li::before { content: none !important; }
+.post-content ul li::marker, .markdown-body ul li::marker {
+  color: rgba(245,243,236,0.3);
+}
+.post-content ol, .markdown-body ol {
+  padding-left: 1.4em;
+  margin: 1.2em 0;
+}
+.post-content ol li, .markdown-body ol li {
+  margin-bottom: 0.5em;
+  padding-left: 0.2em;
+  line-height: 1.85;
+}
+.post-content ol li::marker, .markdown-body ol li::marker {
+  color: rgba(245,243,236,0.35);
+  font-size: 0.9em;
+}
+
+/* ---- hr: three dots, not a line ---- */
+.post-content hr, .markdown-body hr {
+  border: none !important;
+  background: none !important;
+  height: auto;
+  text-align: center;
+  margin: 3em 0;
+}
+.post-content hr::after, .markdown-body hr::after {
+  content: "· · ·";
+  display: block;
+  color: rgba(245,243,236,0.28);
+  font-size: 18px;
+  letter-spacing: 0.8em;
+}
+
+/* ---- links: subtle underline ---- */
+.post-content a, .markdown-body a {
+  color: var(--ink) !important;
+  text-decoration: none;
+  background-image: linear-gradient(rgba(245,243,236,0.25), rgba(245,243,236,0.25));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size .3s ease;
+}
+.post-content a:hover, .markdown-body a:hover {
+  background-size: 100% 2px;
+}
+
+/* ---- images: full-bleed feel ---- */
+.post-content img, .markdown-body img {
+  border-radius: 2px;
+  margin: 2em -2vw;
+  max-width: calc(100% + 4vw);
+  width: calc(100% + 4vw);
+}
+.post-content .image-caption, .markdown-body .image-caption,
+.post-content figcaption, .markdown-body figcaption {
+  text-align: center;
+  color: var(--ink-mute);
+  font-size: 12px;
+  font-family: var(--sans);
+  letter-spacing: 0.15em;
+  margin-top: 10px;
+  margin-bottom: 2em;
+}
+
+/* ---- inline code ---- */
 .post-content code, .markdown-body code {
-  background: rgba(0,0,0,0.55) !important;
-  border: 1px solid var(--ink-line-soft);
-  color: #f0f0f0;
+  background: rgba(245,243,236,0.06) !important;
+  border: none;
+  color: var(--ink);
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-size: 0.85em;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", Menlo, monospace;
 }
 
-/* ---- footer & scroll-top ---- */
+/* ---- code blocks: terminal aesthetic ---- */
+/* Override Fluid's highlight.css white backgrounds — need high specificity */
+.hljs,
+code.hljs,
+pre code.hljs,
+pre .hljs,
+figure.highlight .hljs,
+.highlight .hljs {
+  background: transparent !important;
+  color: rgba(245,243,236,0.78) !important;
+  padding: 0 !important;
+}
+figure.highlight, .code-wrapper, .highlight {
+  background: rgba(8,8,12,0.88) !important;
+  border: 1px solid rgba(245,243,236,0.08);
+  border-radius: 8px;
+  margin: 2.2em 0;
+  overflow: hidden;
+}
+/* language label header */
+.code-header {
+  background: rgba(245,243,236,0.04) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(245,243,236,0.06) !important;
+  border-radius: 0 !important;
+  padding: 8px 16px !important;
+  color: rgba(245,243,236,0.3) !important;
+  font-family: var(--sans) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+}
+.code-header .copy-btn {
+  color: rgba(245,243,236,0.2) !important;
+  transition: color .3s;
+}
+.code-header .copy-btn:hover {
+  color: rgba(245,243,236,0.6) !important;
+}
+/* pre/code */
+.post-content pre, .markdown-body pre,
+figure.highlight pre, .highlight pre {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0;
+  padding: 18px 20px;
+  margin: 0;
+  overflow-x: auto;
+  line-height: 1.75;
+}
+.post-content pre code, .markdown-body pre code,
+figure.highlight pre code, .highlight pre code {
+  background: transparent !important;
+  border: none;
+  color: rgba(245,243,236,0.78);
+  padding: 0;
+  font-size: 13.5px;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", Menlo, monospace;
+}
+/* gutter (line numbers) */
+figure.highlight .gutter,
+figure.highlight .gutter pre,
+.highlight .gutter,
+.highlight .gutter pre {
+  background: transparent !important;
+  border-right: 1px solid rgba(245,243,236,0.06) !important;
+  padding-right: 14px !important;
+}
+figure.highlight .gutter pre .line,
+.highlight .gutter pre .line {
+  color: rgba(245,243,236,0.18) !important;
+  font-size: 12px;
+}
+/* code area */
+figure.highlight .code,
+figure.highlight .code pre,
+.highlight .code,
+.highlight .code pre {
+  background: transparent !important;
+  padding-left: 18px !important;
+}
+/* highlight.js tokens — desaturated film palette */
+.hljs-string    { color: #a8c89a !important; }
+.hljs-comment   { color: rgba(245,243,236,0.3) !important; font-style: italic; }
+.hljs-keyword, .hljs-meta .hljs-keyword { color: #b8aed8 !important; }
+.hljs-number, .hljs-literal  { color: #dcc3a0 !important; }
+.hljs-built_in, .hljs-symbol { color: #a0c4d8 !important; }
+.hljs-title, .hljs-title.function_, .hljs-title.class_ { color: rgba(245,243,236,0.72) !important; }
+.hljs-attr, .hljs-attribute, .hljs-selector-attr,
+.hljs-selector-class, .hljs-selector-id, .hljs-variable { color: #a0c4d8 !important; }
+.hljs-doctag, .hljs-template-tag, .hljs-template-variable,
+.hljs-type, .hljs-variable.language_ { color: #d4a0a0 !important; }
+.hljs-meta, .hljs-operator   { color: rgba(245,243,236,0.55) !important; }
+.hljs-regexp, .hljs-meta .hljs-string { color: #a8c89a !important; }
+.hljs-name, .hljs-quote, .hljs-selector-pseudo,
+.hljs-selector-tag  { color: #a0c4d8 !important; }
+.hljs-section  { color: rgba(245,243,236,0.85) !important; font-weight: 600; }
+.hljs-bullet   { color: #dcc3a0 !important; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong   { font-weight: 700; }
+.hljs-addition { color: #a8c89a !important; background: rgba(168,200,154,0.08) !important; }
+.hljs-deletion { color: #d4a0a0 !important; background: rgba(212,160,160,0.08) !important; }
+.hljs-subst    { color: rgba(245,243,236,0.72) !important; }
+.hljs-code, .hljs-formula { color: rgba(245,243,236,0.4) !important; }
+/* table layout */
+figure.highlight table, .highlight table {
+  width: 100% !important;
+  border: none !important;
+  margin: 0 !important;
+}
+figure.highlight td, .highlight td {
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* ---- tables ---- */
+.post-content table, .markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: 15px;
+}
+.post-content th, .markdown-body th {
+  background: transparent;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(245,243,236,0.2);
+  color: var(--ink-mute);
+}
+.post-content td, .markdown-body td {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(245,243,236,0.06);
+  color: var(--ink-dim);
+}
+
+/* ---- strong / em ---- */
+.post-content strong, .markdown-body strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.post-content em, .markdown-body em {
+  font-style: italic;
+  color: var(--ink-dim);
+}
+
+/* ---- footer ---- */
 footer {
   position: relative;
   z-index: 2;
   background: linear-gradient(180deg, rgba(10,10,12,0), rgba(10,10,12,0.55)) !important;
   border: 0 !important;
-  padding: 22px 0 22px 360px !important;
+  padding: 22px 0 22px 300px !important;
   margin: 0 !important;
 }
 footer .footer-content,
@@ -512,29 +818,29 @@ footer .footer-inner,
 /* ---- mobile ---- */
 @media (max-width: 768px) {
   .cinema-sidebar {
-    flex-direction: row;
+    position: fixed;
     top: 0; left: 0; right: 0; bottom: auto;
-    width: 100%;
-    height: 56px;
-    padding: 0 22px;
-    align-items: center;
-    border-right: none;
-    border-bottom: 1px solid var(--ink-line-soft);
-  }
-  .cinema-brand { margin: 0 22px 0 0; align-self: center; }
-  .cinema-nav { flex-direction: row; gap: 28px; flex: none; }
-  .cinema-nav-item { letter-spacing: 0.20em; font-size: 13px; padding: 4px 0 4px 8px; }
-  .cinema-mode-toggle { display: none; }
-  .page-glass { padding: 10vh 6vw 4vh; }
-  .index-card { padding: 0 6vw 12vh; }
-  footer { padding: 24px 0 24px 18px !important; }
-  .cinema-sidebar {
     width: 100% !important;
     height: auto !important;
-    overflow-y: visible !important;
+    flex-direction: row;
+    align-items: center;
     padding: 14px 22px !important;
+    border-right: none;
+    border-bottom: 1px solid var(--ink-line-soft);
+    overflow-y: visible !important;
   }
-  .cinema-feed { max-height: 240px; overflow-y: auto; padding-right: 12px; }
-  .cinema-signature { margin: 0 0 24px !important; }
-  .cinema-nav { flex-direction: row !important; gap: 18px !important; margin: 0 12px 0 0 !important; }
+  .cinema-nav {
+    flex-direction: row !important;
+    gap: 14px !important;
+    margin: 0 !important;
+    flex-wrap: wrap;
+  }
+  .cinema-nav-item {
+    letter-spacing: 0.15em;
+    font-size: 12px;
+    padding: 4px 0 4px 6px;
+  }
+  main { padding: 70px 5vw 0 5vw; }
+  .index-card { padding: 0 0 12vh; margin-top: 4vh; }
+  footer { padding: 24px 18px !important; }
 }

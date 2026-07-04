@@ -1,45 +1,45 @@
+/**
+ * cinema.js — route detection, nav highlighting, blog slogan injection.
+ * Content (quotes) comes from source/_data/quotes.yml via the DOM.
+ */
 (function () {
-  // Body class per route — used by minimal.css for page-specific tweaks
-  var p = window.location.pathname.replace(/\/$/, '') || '/'
-  // blog list (home) or alias /blog
-  if (p === '' || p === '/' || p === '/blog' || p === '/blog.html') {
-    document.body.classList.add('route-blog')
-  }
-  if (p.indexOf('/qianhong') === 0) document.body.classList.add('route-qianhong')
-  if (p.indexOf('/about') === 0 || p === '/me' || p === '/me.html') {
-    document.body.classList.add('route-me')
-  }
+  var p = window.location.pathname.replace(/\/$/, '') || '/';
 
-  // Highlight current nav item based on current path
+  /* ---- route classes ---- */
+  if (p === '' || p === '/' || p === '/blog' || p === '/blog.html') {
+    document.body.classList.add('route-blog');
+  }
+  if (p.indexOf('/about') === 0 || p === '/me' || p === '/me.html') {
+    document.body.classList.add('route-me');
+  }
+  if (p.indexOf('/diary') === 0)  document.body.classList.add('route-diary');
+  if (p.indexOf('/papers') === 0) document.body.classList.add('route-papers');
+
+  /* ---- active nav highlight ---- */
   document.querySelectorAll('.cinema-nav-item').forEach(function (a) {
     var href = (a.getAttribute('href') || '').replace(/\/$/, '');
     if (!href) return;
-    if (href === path || (href === '' && path === '/index.html')) {
+    if (href === p || (href === '' && p === '/index.html')) {
       a.classList.add('is-active');
-    } else if (href !== '/' && path.indexOf(href) === 0) {
+    } else if (href !== '/' && p.indexOf(href) === 0) {
       a.classList.add('is-active');
     }
   });
 
-  // Manual theme toggle — switches data-user-color-scheme on <html>
-  var btn = document.getElementById('cinema-mode-toggle');
-  if (!btn) return;
-  function apply() {
-    var mode = localStorage.getItem('cinema-mode') || 'dark';
-    if (mode === 'light') {
-      document.documentElement.setAttribute('data-user-color-scheme', 'light');
-    } else {
-      document.documentElement.removeAttribute('data-user-color-scheme');
+  /* ---- slogan (random quote above post list, blog + papers) ---- */
+  if (document.body.classList.contains('route-blog') || document.body.classList.contains('route-papers')) {
+    var el = document.getElementById('cinema-quotes');
+    var quotes = [];
+    try { quotes = JSON.parse(el.textContent); } catch (e) {}
+    if (quotes.length) {
+      var quote = quotes[Math.floor(Math.random() * quotes.length)];
+      var board = document.getElementById('board');
+      if (board) {
+        var slogan = document.createElement('div');
+        slogan.className = 'blog-slogan';
+        slogan.innerHTML = '<p class="blog-slogan-text">' + quote + '</p>';
+        board.parentNode.insertBefore(slogan, board);
+      }
     }
   }
-  apply();
-  btn.addEventListener('click', function () {
-    var cur = localStorage.getItem('cinema-mode') || 'dark';
-    var next = cur === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('cinema-mode', next);
-    apply();
-  });
-  btn.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
-  });
 })();
