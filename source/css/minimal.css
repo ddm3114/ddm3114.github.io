@@ -39,12 +39,16 @@ nav#navbar, #navbar,
 
 /* ---- background video (fixed, fullscreen, slow ken-burns) ---- */
 .bg-video {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -3;
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  object-fit: cover !important;
+  z-index: 0 !important;
   /* Long take: slow forward push + tiny pan. 30s cycle. */
   animation: bgBreath 30s ease-in-out infinite alternate;
   will-change: transform;
@@ -57,10 +61,10 @@ nav#navbar, #navbar,
 
 /* ---- gradient scrim on top of video (transparent-ish middle) ---- */
 .bg-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
   background:
     radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.35) 70%, rgba(0,0,0,0.65) 100%),
     linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.20) 22%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.72) 100%);
@@ -68,15 +72,16 @@ nav#navbar, #navbar,
 
 /* ---- cinematic letterbox (fixed, very thin) ---- */
 .letterbox {
-  position: fixed;
-  left: 0; right: 0;
-  height: 5.5vh;
-  background: #000;
-  z-index: 1;
-  pointer-events: none;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 5.5vh !important;
+  background: #000 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
 }
-.letterbox-top    { top: 0; }
-.letterbox-bottom { bottom: 0; }
+.letterbox-top    { top: 0 !important; }
+.letterbox-bottom { bottom: 0 !important; }
 
 /* ---- transparent left sidebar ---- */
 .cinema-sidebar {
@@ -91,7 +96,7 @@ nav#navbar, #navbar,
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   border-right: 1px solid var(--ink-line-soft);
-  z-index: 10;
+  z-index: 20;
 }
 
 .cinema-brand {
@@ -156,9 +161,10 @@ nav#navbar, #navbar,
 /* ---- content area: transparent over video ---- */
 main {
   position: relative;
-  z-index: 2;
+  z-index: 3 !important;
   padding: 0 0 0 100px;   /* leave space for sidebar */
   min-height: 100vh;
+  background: transparent !important;
 }
 @media (max-width: 768px) {
   main { padding: 0 0 0 0; }

@@ -13,17 +13,21 @@
   var video = '/video/hero.mp4'
 %>
 
-<!-- ALWAYS-on background. fixed + ken-burns. -->
-<video class="bg-video" autoplay loop muted playsinline preload="auto" poster="/img/hero-poster.jpg">
+<!-- ALWAYS-on background. fixed + ken-burns. inline-style as a safety net -->
+<video class="bg-video" autoplay loop muted playsinline preload="auto" poster="/img/hero-poster.jpg"
+       style="position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; min-width:100vw !important; min-height:100vh !important; object-fit:cover !important; z-index:0 !important;">
   <source src="<%= video %>" type="video/mp4">
 </video>
 
 <!-- Cinematic scrim: dim on top + bottom, transparent in the middle band -->
-<div class="bg-scrim"></div>
+<div class="bg-scrim"
+     style="position:fixed !important; inset:0 !important; z-index:1 !important; pointer-events:none !important;"></div>
 
 <!-- Thin fixed letterbox bars (keeps the cinematic frame on every page) -->
-<div class="letterbox letterbox-top"></div>
-<div class="letterbox letterbox-bottom"></div>
+<div class="letterbox letterbox-top"
+     style="position:fixed !important; top:0 !important; left:0 !important; right:0 !important; height:5.5vh !important; background:#000 !important; z-index:2 !important; pointer-events:none !important;"></div>
+<div class="letterbox letterbox-bottom"
+     style="position:fixed !important; bottom:0 !important; left:0 !important; right:0 !important; height:5.5vh !important; background:#000 !important; z-index:2 !important; pointer-events:none !important;"></div>
 
 <!-- Transparent left sidebar -->
 <aside class="cinema-sidebar" aria-label="<%= __('menu') || 'menu' %>">
