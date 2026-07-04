@@ -13,7 +13,6 @@ concurrency:
 permissions:
   contents: write   # push to gh-pages branch
   pages: write      # bind deploy to Pages
-  id-token: write   # OIDC for peaceiris GHA token
 
 jobs:
   build-and-deploy:
@@ -33,18 +32,6 @@ jobs:
 
       - name: Generate static files
         run: npx hexo generate
-
-      - name: Bump cache-bust on hero video URL
-        run: |
-          # Bump "?v=N" so browsers that cached the old video get the new one.
-          if [ -f public/video/hero.mp4 ]; then
-            OLD=$(grep -oE '/video/hero\.mp4\?v=[0-9]+' source/_includes/cinema-shell.ejs | head -1 \
-                  | grep -oE '[0-9]+' || echo "")
-            NEW=$((OLD + 1))
-            find public -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -print0 \
-              | xargs -0 sed -i -E "s#/video/hero\\.mp4(\\?v=${OLD})?#/video/hero.mp4?v=${NEW}#g"
-            echo "Cache-bust: ${OLD:-none} -> ${NEW}"
-          fi
 
       - name: Publish to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
