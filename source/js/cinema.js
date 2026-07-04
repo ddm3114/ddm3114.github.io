@@ -63,5 +63,29 @@
     vid.addEventListener('timeupdate', function () {
       sessionStorage.setItem('heroTime', vid.currentTime);
     });
+
+    /* ---- video pause/play toggle ---- */
+    var paused = sessionStorage.getItem('videoPaused') === '1';
+    var btn = document.getElementById('video-toggle');
+    var icon = document.getElementById('video-toggle-icon');
+
+    if (paused) {
+      vid.pause();
+      icon.textContent = '▶';
+    }
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        if (vid.paused) {
+          vid.play();
+          icon.textContent = '⏸';
+          sessionStorage.setItem('videoPaused', '0');
+        } else {
+          vid.pause();
+          icon.textContent = '▶';
+          sessionStorage.setItem('videoPaused', '1');
+        }
+      });
+    }
   }
 })();
